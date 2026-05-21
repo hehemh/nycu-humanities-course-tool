@@ -6,6 +6,7 @@ Streamlit 網頁介面 - 供行政人員使用
     streamlit run app.py
 """
 
+import ssl
 import re
 import io
 import urllib.request
@@ -28,7 +29,8 @@ def api_post(endpoint: str, payload: dict):
     url  = BASE_URL + endpoint
     data = urllib.parse.urlencode(payload).encode("utf-8")
     req  = urllib.request.Request(url, data=data)
-    with urllib.request.urlopen(req, timeout=30) as resp:
+    ssl_context = ssl._create_unverified_context()
+    with urllib.request.urlopen(req, timeout=30, context=ssl_context) as resp:
         return json.loads(resp.read().decode("utf-8"))
 
 
